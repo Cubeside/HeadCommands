@@ -1,0 +1,17 @@
+database:
+  host: localhost
+  user: CHANGETHIS
+  password: CHANGETHIS
+  database: CHANGETHIS
+  tableprefix: headcommands
+
+api:
+  baseUrl: https://minecraft-heads.com
+  apiKey: CHANGETHIS
+
+settings:
+  refreshOnEnable: false
+  resultsPerPage: 10
+  connectTimeoutSeconds: 10
+  requestTimeoutSeconds: 60
+  maxPagesPerCategory: 200

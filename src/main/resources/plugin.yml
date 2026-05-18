@@ -1,0 +1,27 @@
+name: HeadCommands
+main: de.iani.headcommands.HeadCommandsPlugin
+version: ${project.version}
+api-version: 1.21
+author: Brokkonaut
+description: Cached minecraft-heads.com custom head commands
+
+depend: [CubesideUtils]
+
+commands:
+  headcommands:
+    description: Search and give cached custom heads
+    aliases: [heads]
+
+permissions:
+  headcommands.use:
+    description: Allows reading cached head data
+    default: op
+  headcommands.search:
+    description: Allows searching cached heads
+    default: op
+  headcommands.give:
+    description: Allows receiving heads by id
+    default: op
+  headcommands.admin:
+    description: Allows reloading config and refreshing the cache
+    default: op
