@@ -118,7 +118,20 @@ public class HeadCacheService {
                 boolean dataLimited = categoriesResponse.meta().dataLimited();
 
                 for (HeadCategory category : categories) {
-                    for (int page = 1; page <= config.maxPagesPerCategory(); page++) {
+                    ApiResponse<CachedHead> firstPage = client.fetchHeads(category.id(), 1);
+                    if (firstPage.pagination() == null) {
+                        throw new HeadApiException("Custom-heads response for category " + category.id() + " does not contain pagination.");
+                    }
+                    heads.addAll(firstPage.data());
+                    warnings.addAll(firstPage.warnings());
+                    if (firstPage.meta().apiVersion() != null) {
+                        apiVersion = firstPage.meta().apiVersion();
+                    }
+                    license = firstPage.meta().license();
+                    dataLimited = dataLimited || firstPage.meta().dataLimited();
+
+                    int lastPage = Math.max(1, firstPage.pagination().lastPage());
+                    for (int page = 2; page <= lastPage; page++) {
                         ApiResponse<CachedHead> response = client.fetchHeads(category.id(), page);
                         heads.addAll(response.data());
                         warnings.addAll(response.warnings());
@@ -127,9 +140,6 @@ public class HeadCacheService {
                         }
                         license = response.meta().license();
                         dataLimited = dataLimited || response.meta().dataLimited();
-                        if (response.data().size() == 0) {
-                            break;
-                        }
                     }
                 }
 

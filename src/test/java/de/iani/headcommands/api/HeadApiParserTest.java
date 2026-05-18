@@ -37,6 +37,7 @@ class HeadApiParserTest {
         String json = """
                 {
                   "meta": {"api_version":"2.2.0","demo_mode":false,"data_limited":false,"license":"free","records":2},
+                  "pagination": {"total": 93247, "per_page": 10000, "current_page": 1, "last_page": 10},
                   "warnings": ["test warning"],
                   "data": [
                     {"id": 10, "n": "Apple", "c": 4, "i": "00000000-0000-0000-0000-000000000010", "u": "abc", "p": "2025-07-13"},
@@ -48,6 +49,10 @@ class HeadApiParserTest {
         ApiResponse<CachedHead> response = parser.parseHeads(json, true);
 
         assertEquals(2, response.data().size());
+        assertEquals(93247, response.pagination().total());
+        assertEquals(10000, response.pagination().perPage());
+        assertEquals(1, response.pagination().currentPage());
+        assertEquals(10, response.pagination().lastPage());
         assertEquals(LocalDate.of(2025, 7, 13), response.data().get(0).publishedAt());
         assertNull(response.data().get(1).publishedAt());
         assertEquals("test warning", response.warnings().get(0));

@@ -14,4 +14,3 @@ settings:
   resultsPerPage: 10
   connectTimeoutSeconds: 10
   requestTimeoutSeconds: 60
-  maxPagesPerCategory: 200

@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.iani.headcommands.model.ApiMeta;
+import de.iani.headcommands.model.ApiPagination;
 import de.iani.headcommands.model.ApiResponse;
 import de.iani.headcommands.model.CachedHead;
 import de.iani.headcommands.model.HeadCategory;
@@ -25,7 +26,7 @@ public class HeadApiParser {
             }
             categories.add(new HeadCategory(id, name));
         }
-        return new ApiResponse<>(parseMeta(root), parseWarnings(root), List.copyOf(categories));
+        return new ApiResponse<>(parseMeta(root), parsePagination(root), parseWarnings(root), List.copyOf(categories));
     }
 
     public ApiResponse<CachedHead> parseHeads(String json, boolean requireFreeFields) throws HeadApiException {
@@ -52,7 +53,7 @@ public class HeadApiParser {
             }
             heads.add(new CachedHead(id, uuid, categoryId, name, url, publishedAt));
         }
-        return new ApiResponse<>(meta, parseWarnings(root), List.copyOf(heads));
+        return new ApiResponse<>(meta, parsePagination(root), parseWarnings(root), List.copyOf(heads));
     }
 
     private static JsonObject parseRoot(String json) throws HeadApiException {
@@ -92,6 +93,18 @@ public class HeadApiParser {
             }
         }
         return List.copyOf(result);
+    }
+
+    private static ApiPagination parsePagination(JsonObject root) {
+        JsonObject pagination = getObject(root, "pagination");
+        if (pagination == null) {
+            return null;
+        }
+        return new ApiPagination(
+                getInt(pagination, "total", 0),
+                getInt(pagination, "per_page", 0),
+                getInt(pagination, "current_page", 1),
+                getInt(pagination, "last_page", 1));
     }
 
     private static List<JsonObject> dataObjects(JsonObject root) throws HeadApiException {
