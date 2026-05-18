@@ -75,6 +75,7 @@ class HeadApiParserTest {
 
         assertEquals(1, response.data().size());
         assertEquals("Apple", response.data().get(0).name());
+        assertNull(response.pagination());
     }
 
     @Test
