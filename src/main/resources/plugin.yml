@@ -10,7 +10,6 @@ depend: [CubesideUtils]
 commands:
   headcommands:
     description: Search and give cached custom heads
-    aliases: [heads]
 
 permissions:
   headcommands.use:
